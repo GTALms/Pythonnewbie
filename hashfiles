@@ -1,0 +1,53 @@
+# Author: Gertjan Leemans, gertjan.leemans@hva.nl, 500895041
+# Goal: To hash 2 files and compare them in the commandline
+
+import sys
+import hashlib
+
+
+def hashfile(file):
+    # buf_size is in bytes
+    buf_size = 65536
+
+    # Initializing the sha256() method
+    sha256 = hashlib.sha256()
+
+    # Opening the file provided as the first commandline argument
+    # r for read, b for binary
+    with open(file, "rb") as f:
+
+        while True:
+
+            # reading data = buf_size from the file and saving it in a variable
+            data = f.read(buf_size)
+
+            # if not data end script
+            if not data:
+                break
+
+            # Sending the data to sh256 hash function
+            sha256.update(data)
+
+    # sha256.hexdigest() hashes all the input data passed to the sha256() via sha256.update()
+    # acts as a finalize method, after which all the input data gets hashed hexdigest()
+    # hashes the data, and returns the output in hexadecimal format
+    return sha256.hexdigest()
+
+
+# Calling hashfile() function to obtain hashes of the files, and saving the result in a variable
+hash_1 = hashfile(sys.argv[1])
+hash_2 = hashfile(sys.argv[2])
+
+
+def compare_hash():
+    if hash_1 == hash_2:
+        print("Both files are same")
+        print(f"Hash: {hash_1}")
+    else:
+        print("Files are different!")
+        print(f"Hash of File 1: {hash_1}")
+        print(f"Hash of File 2: {hash_2}")
+
+
+if __name__ == '__main__':
+    compare_hash()
